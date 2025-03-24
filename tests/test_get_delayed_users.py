@@ -1,15 +1,16 @@
 import json
 import requests
+from allure_commons.types import Severity
 from jsonschema import validate
 from path import path
 import allure
 
 
-@allure.tag('API')
-@allure.feature('API')
-@allure.story('Get user info')
-@allure.title('Get existing user info')
-@allure.link('https://reqres.in/')
+@allure.tag("api")
+@allure.severity(Severity.CRITICAL)
+@allure.label("owner", "AleksSH")
+@allure.feature("")
+@allure.story("")
 def test_get_delayed_response(base_url):
     response = requests.get(base_url + '/api/users', params='delay=2')
 

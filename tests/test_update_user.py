@@ -1,10 +1,17 @@
 import requests
 import allure
 import json
+
+from allure_commons.types import Severity
 from jsonschema import validate
 from pathlib import Path
 
 
+@allure.tag("api")
+@allure.severity(Severity.CRITICAL)
+@allure.label("owner", "AleksSH")
+@allure.feature("")
+@allure.story("")
 def test_update_user(base_url):
     endpoint = '/api/users/2'
     url = base_url + endpoint

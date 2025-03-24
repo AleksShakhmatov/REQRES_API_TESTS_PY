@@ -1,15 +1,16 @@
 import json
 import requests
+from allure_commons.types import Severity
 from jsonschema import validate
 from pathlib import Path
 import allure
 
 
-@allure.tag('API')
-@allure.feature('API')
-@allure.story('Get user info')
-@allure.title('Get existing user info')
-@allure.link('https://reqres.in/')
+@allure.tag("api")
+@allure.severity(Severity.CRITICAL)
+@allure.label("owner", "AleksSH")
+@allure.feature("")
+@allure.story("")
 def test_post_register_unsuccessful(base_url):
     endpoint = '/api/register'
     url = base_url + endpoint

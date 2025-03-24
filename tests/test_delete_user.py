@@ -1,12 +1,13 @@
 import requests
 import allure
+from allure_commons.types import Severity
 
 
-@allure.tag('API')
-@allure.feature('API')
-@allure.story('Get user info')
-@allure.title('Get existing user info')
-@allure.link('https://reqres.in/')
+@allure.tag("api")
+@allure.severity(Severity.CRITICAL)
+@allure.label("owner", "AleksSH")
+@allure.feature("")
+@allure.story("")
 def test_delete_user(base_url):
     response = requests.delete(base_url + '/api/users', params='page=2')
 
