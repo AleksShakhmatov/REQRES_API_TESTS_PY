@@ -1,24 +1,40 @@
-import json
 import requests
-from jsonschema import validate
-from path import path
 import allure
+import json
+from jsonschema import validate
+from pathlib import Path
 
 
-@allure.tag('API')
-@allure.feature('API')
-@allure.story('Get user info')
-@allure.title('Get existing user info')
-@allure.link('https://reqres.in/')
 def test_update_user(base_url):
-    response = requests.post = requests.put(base_url + '/api/users/2', data={"name": "morpheus", "job": "zion resident"})
-    body = response.json()
-    schema = path('update_user.json')
+    endpoint = '/api/users/2'
+    url = base_url + endpoint
+    data = {"name": "morpheus", "job": "zion resident"}
+    schema = Path('update_user.json')
 
-    with allure.step('Проверить'):
-        assert response.status_code == 200
-        assert response.json()['job'] == 'zion resident'
-        assert response.json()['updatedAt'] != ''
-        with open(schema) as file:
-            f = file.read()
-            validate(body, schema=json.loads(f))
+    with allure.step(f"Выполнить PUT запрос к {url} с данными: {data}"):
+        response = requests.put(url, data=data)
+        allure.attach(
+            body=str(response.content),
+            name="Response Content",
+            attachment_type=allure.attachment_type.TEXT
+        )
+    with allure.step('Проверить статус код'):
+        assert response.status_code == 200, f"Ожидался статус код 200, получен {response.status_code}"
+
+    with allure.step('Проверить значения в ответе'):
+        response_json = response.json()
+        assert response_json[
+                   'job'] == 'zion resident', f"Ожидалась должность 'zion resident', получена {response_json['job']}"
+        assert response_json['updatedAt'] != '', "Поле updatedAt не должно быть пустым"
+
+    with allure.step('Проверить схему ответа'):
+        try:
+            with open(schema, 'r') as file:
+                schema_json = json.load(file)
+            validate(response_json, schema_json)
+        except Exception as e:
+            allure.attach(
+                body=str(e),
+                name="Schema Validation",
+                attachment_type=allure.attachment_type.TEXT
+            )
