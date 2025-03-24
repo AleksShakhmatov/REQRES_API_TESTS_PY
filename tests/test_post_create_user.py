@@ -5,6 +5,11 @@ from path import path
 import allure
 
 
+@allure.tag('API')
+@allure.feature('API')
+@allure.story('Get user info')
+@allure.title('Get existing user info')
+@allure.link('https://reqres.in/')
 def test_post_create_user(base_url):
     response = requests.post(base_url + '/api/users', data={"name": "morpheus", "job": "leader"})
     body = response.json()

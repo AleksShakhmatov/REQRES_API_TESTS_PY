@@ -5,6 +5,11 @@ from path import path
 import allure
 
 
+@allure.tag('API')
+@allure.feature('API')
+@allure.story('Get user info')
+@allure.title('Get existing user info')
+@allure.link('https://reqres.in/')
 def test_post_register_unsuccessful(base_url):
     response = requests.post(base_url + '/api/register', data={"email": "sydney@fife"})
     body = response.json()
