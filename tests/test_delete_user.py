@@ -16,8 +16,8 @@ def test_delete_user(base_url):
     with allure.step(f"Выполнить DELETE запрос к {url} с параметрами: {params}"):
         response = requests.delete(url, params=params)
         allure.attach(
-            body=str(response.content),
-            name="Response Content",
+            body=str(response),
+            name="response",
             attachment_type=AttachmentType.TEXT
         )
 

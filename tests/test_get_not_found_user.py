@@ -15,8 +15,8 @@ def test_get_not_found_user(base_url):
     with allure.step(f"Выполнить GET запрос к {url}"):
         response = requests.get(url)
         allure.attach(
-            body=str(response.content),
-            name="Response Content",
+            body=str(response),
+            name="response",
             attachment_type=AttachmentType.TEXT
         )
 

@@ -21,8 +21,8 @@ def test_post_create_user(base_url):
         response = requests.post(url, data=data)
         body = response.json()
         allure.attach(
-            body=str(response.content),
-            name="Response Content",
+            body=str(response),
+            name="response",
             attachment_type=AttachmentType.TEXT
         )
 
