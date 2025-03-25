@@ -1,6 +1,6 @@
 import json
 import requests
-from allure_commons.types import Severity
+from allure_commons.types import Severity, AttachmentType
 from jsonschema import validate
 from path import path
 import allure
@@ -23,7 +23,7 @@ def test_post_create_user(base_url):
         allure.attach(
             body=str(response.content),
             name="Response Content",
-            attachment_type=allure.attachment_type.TEXT
+            attachment_type=AttachmentType.TEXT
         )
 
     with allure.step('Проверить статус код'):

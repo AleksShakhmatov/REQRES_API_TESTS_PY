@@ -1,6 +1,6 @@
 import requests
 import allure
-from allure_commons.types import Severity
+from allure_commons.types import Severity, AttachmentType
 
 
 @allure.tag("api")
@@ -17,7 +17,7 @@ def test_get_not_found_user(base_url):
         allure.attach(
             body=str(response.content),
             name="Response Content",
-            attachment_type=allure.attachment_type.TEXT
+            attachment_type=AttachmentType.TEXT
         )
 
     with allure.step('Проверить статус код'):

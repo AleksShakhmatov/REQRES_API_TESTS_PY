@@ -1,7 +1,7 @@
 import requests
 import allure
 import json
-from allure_commons.types import Severity
+from allure_commons.types import Severity, AttachmentType
 from jsonschema import validate
 from path import path
 
@@ -23,7 +23,7 @@ def test_update_user(base_url):
         allure.attach(
             body=str(response.content),
             name="Response Content",
-            attachment_type=allure.attachment_type.TEXT
+            attachment_type=AttachmentType.TEXT
         )
     with allure.step('Проверить статус код'):
         assert response.status_code == 200, f"Ожидался статус код 200, получен {response.status_code}"
