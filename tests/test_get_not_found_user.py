@@ -4,13 +4,24 @@ from allure_commons.types import Severity
 
 
 @allure.tag("api")
-@allure.severity(Severity.CRITICAL)
+@allure.severity(Severity.NORMAL)
 @allure.label("owner", "AleksSH")
-@allure.feature("")
-@allure.story("")
+@allure.feature("Получение пользователя")
+@allure.story("Попытка получения несуществующего пользователя")
 def test_get_not_found_user(base_url):
-    response = requests.get(base_url + '/api/users/23')
+    endpoint = '/api/users/23'
+    url = base_url + endpoint
 
-    with allure.step('Проверить'):
-        assert response.status_code == 404
-        assert response.json() == {}
+    with allure.step(f"Выполнить GET запрос к {url}"):
+        response = requests.get(url)
+        allure.attach(
+            body=str(response.content),
+            name="Response Content",
+            attachment_type=allure.attachment_type.TEXT
+        )
+
+    with allure.step('Проверить статус код'):
+        assert response.status_code == 404, f"Ожидался статус код 404, получен {response.status_code}"
+
+    with allure.step('Проверить тело ответа'):
+        assert response.json() == {}, "Ожидалось пустое тело ответа"

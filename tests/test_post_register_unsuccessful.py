@@ -2,23 +2,24 @@ import json
 import requests
 from allure_commons.types import Severity
 from jsonschema import validate
-from pathlib import Path
+from path import path
 import allure
 
 
 @allure.tag("api")
 @allure.severity(Severity.CRITICAL)
 @allure.label("owner", "AleksSH")
-@allure.feature("")
-@allure.story("")
+@allure.feature("Регистрация пользователя")
+@allure.story("Неуспешная регистрация пользователя")
 def test_post_register_unsuccessful(base_url):
     endpoint = '/api/register'
     url = base_url + endpoint
     data = {"email": "sydney@fife"}
-    schema = Path('register_unsuccessful.json')
+    schema = path('register_unsuccessful.json')
 
     with allure.step(f"Выполнить POST запрос к {url} с данными: {data}"):
         response = requests.post(url, data=data)
+        body = response.json()
         allure.attach(
             body=str(response.content),
             name="Response Content",
@@ -34,14 +35,6 @@ def test_post_register_unsuccessful(base_url):
                                                               f"получено {response_json['error']}")
 
     with allure.step('Проверить схему ответа'):
-        try:
-            with open(schema, 'r') as file:
-                schema_json = json.load(file)
-            response_json = response.json()
-            validate(response_json, schema_json)
-        except Exception as e:
-            allure.attach(
-                body=str(e),
-                name="Schema Validation Error",
-                attachment_type=allure.attachment_type.TEXT
-            )
+        with open(schema) as file:
+            f = file.read()
+            validate(body, schema=json.loads(f))

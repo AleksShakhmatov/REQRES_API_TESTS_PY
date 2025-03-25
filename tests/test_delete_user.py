@@ -6,11 +6,23 @@ from allure_commons.types import Severity
 @allure.tag("api")
 @allure.severity(Severity.CRITICAL)
 @allure.label("owner", "AleksSH")
-@allure.feature("")
-@allure.story("")
+@allure.feature("Удаление пользователя")
+@allure.story("Успешное удаление пользователя")
 def test_delete_user(base_url):
-    response = requests.delete(base_url + '/api/users', params='page=2')
+    endpoint = '/api/users'
+    params = {'page': 2}
+    url = base_url + endpoint
 
-    with allure.step('Проверить'):
-        assert response.status_code == 204
-        assert response.text == ''
+    with allure.step(f"Выполнить DELETE запрос к {url} с параметрами: {params}"):
+        response = requests.delete(url, params=params)
+        allure.attach(
+            body=str(response.content),
+            name="Response Content",
+            attachment_type=allure.attachment_type.TEXT
+        )
+
+    with allure.step('Проверить статус код'):
+        assert response.status_code == 204, f"Ожидался статус код 204, получен {response.status_code}"
+
+    with allure.step('Проверить тело ответа'):
+        assert response.text == '', "Ожидалось пустое тело ответа"

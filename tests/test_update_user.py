@@ -1,25 +1,25 @@
 import requests
 import allure
 import json
-
 from allure_commons.types import Severity
 from jsonschema import validate
-from pathlib import Path
+from path import path
 
 
 @allure.tag("api")
 @allure.severity(Severity.CRITICAL)
 @allure.label("owner", "AleksSH")
-@allure.feature("")
-@allure.story("")
+@allure.feature("Обновление пользователя")
+@allure.story("Успешное обновление пользователя")
 def test_update_user(base_url):
     endpoint = '/api/users/2'
     url = base_url + endpoint
     data = {"name": "morpheus", "job": "zion resident"}
-    schema = Path('update_user.json')
+    schema = path('update_user.json')
 
     with allure.step(f"Выполнить PUT запрос к {url} с данными: {data}"):
         response = requests.put(url, data=data)
+        body = response.json()
         allure.attach(
             body=str(response.content),
             name="Response Content",
@@ -35,13 +35,6 @@ def test_update_user(base_url):
         assert response_json['updatedAt'] != '', "Поле updatedAt не должно быть пустым"
 
     with allure.step('Проверить схему ответа'):
-        try:
-            with open(schema, 'r') as file:
-                schema_json = json.load(file)
-            validate(response_json, schema_json)
-        except Exception as e:
-            allure.attach(
-                body=str(e),
-                name="Schema Validation",
-                attachment_type=allure.attachment_type.TEXT
-            )
+        with open(schema) as file:
+            f = file.read()
+            validate(body, schema=json.loads(f))

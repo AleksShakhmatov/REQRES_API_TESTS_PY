@@ -7,18 +7,34 @@ import allure
 
 
 @allure.tag("api")
-@allure.severity(Severity.CRITICAL)
+@allure.severity(Severity.NORMAL)
 @allure.label("owner", "AleksSH")
-@allure.feature("")
-@allure.story("")
+@allure.feature("Получение пользователей")
+@allure.story("Получение списка пользователей с задержкой")
 def test_get_delayed_response(base_url):
-    response = requests.get(base_url + '/api/users', params='delay=2')
+    endpoint = '/api/users'
+    params = {'delay': 2}
+    url = base_url + endpoint
+    schema = path('delayed_users.json')
 
-    with allure.step('Проверить'):
-        assert response.status_code == 200
-        assert response.json()['page'] == 1
-        assert response.json()['data'] != []
-        schema = path('delayed_users.json')
+    with allure.step(f"Выполнить GET запрос к {url} с параметрами: {params}"):
+        response = requests.get(url, params=params)
+        body = response.json()
+        allure.attach(
+            body=str(response.content),
+            name="Response Content",
+            attachment_type=allure.attachment_type.TEXT
+        )
+
+    with allure.step('Проверить статус код'):
+        assert response.status_code == 200, f"Ожидался статус код 200, получен {response.status_code}"
+
+    with allure.step('Проверить значения в ответе'):
+        response_json = response.json()
+        assert response_json['page'] == 1, f"Ожидалась страница 1, получено {response_json['page']}"
+        assert response_json['data'] != [], "Поле data не должно быть пустым"
+
+    with allure.step('Проверить схему ответа'):
         with open(schema) as file:
             f = file.read()
-            validate(response.json(), schema=json.loads(f))
+            validate(body, schema=json.loads(f))
