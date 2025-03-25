@@ -21,8 +21,8 @@ def test_post_register_unsuccessful(base_url):
         response = requests.post(url, data=data)
         body = response.json()
         allure.attach(
-            body=str(response),
-            name="response",
+            body=str(response.content),
+            name="Response Content",
             attachment_type=AttachmentType.TEXT
         )
 

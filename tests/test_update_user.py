@@ -21,8 +21,8 @@ def test_update_user(base_url):
         response = requests.put(url, data=data)
         body = response.json()
         allure.attach(
-            body=str(response),
-            name="response",
+            body=str(response.content),
+            name="Response Content",
             attachment_type=AttachmentType.TEXT
         )
     with allure.step('Проверить статус код'):

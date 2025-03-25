@@ -21,8 +21,8 @@ def test_get_delayed_response(base_url):
         response = requests.get(url, params=params)
         body = response.json()
         allure.attach(
-            body=str(response),
-            name="response",
+            body=str(response.content),
+            name="Response Content",
             attachment_type=AttachmentType.TEXT
         )
 
