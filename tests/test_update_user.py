@@ -25,6 +25,7 @@ def test_update_user(base_url):
             name="Response Content",
             attachment_type=AttachmentType.TEXT
         )
+
     with allure.step('Проверить статус код'):
         assert response.status_code == 200, f"Ожидался статус код 200, получен {response.status_code}"
 
